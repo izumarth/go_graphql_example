@@ -11,12 +11,18 @@ type UserService interface {
 	GetUserByName(ctx context.Context, name string) (*model.User, error)
 }
 
+type RepoService interface {
+	GetRepoByFullName(ctx context.Context, owner string, name string) (*model.Repository, error)
+}
+
 type Services interface {
 	UserService
+	RepoService
 }
 
 type services struct {
 	*userService
+	*repoService
 }
 
 func New(
@@ -24,5 +30,6 @@ func New(
 ) Services {
 	return &services{
 		userService: &userService{exec: exec},
+		repoService: &repoService{exec: exec},
 	}
 }
