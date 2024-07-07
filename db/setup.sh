@@ -2,7 +2,7 @@
 
 set -eu
 
-readonly DBFILE_NAME="mygraphql.db"
+readonly DBFILE_NAME="./db/mygraphql.db"
 
 # Create DB file
 if [ ! -e ${DBFILE_NAME} ];then
@@ -14,6 +14,13 @@ echo "creating tables..."
 sqlite3 ${DBFILE_NAME} "
 PRAGMA foreign_keys = ON;
 
+DROP TABLE IF EXISTS projectcards;
+DROP TABLE IF EXISTS pullrequests;
+DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS issues;
+DROP TABLE IF EXISTS repositories;
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE IF NOT EXISTS users(\
 	id TEXT PRIMARY KEY NOT NULL,\
 	name TEXT NOT NULL,\
@@ -24,7 +31,7 @@ CREATE TABLE IF NOT EXISTS repositories(\
 	id TEXT PRIMARY KEY NOT NULL,\
 	owner TEXT NOT NULL,\
 	name TEXT NOT NULL,\
-	created_at TIMESTAMP NOT NULL DEFAULT (DATETIME('now','localtime')),\
+	created_at DATETIME NOT NULL DEFAULT (DATETIME('now','localtime')),\
 	FOREIGN KEY (owner) REFERENCES users(id)\
 );
 

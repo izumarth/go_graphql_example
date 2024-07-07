@@ -23,10 +23,10 @@ import (
 
 // Repository is an object representing the database table.
 type Repository struct {
-	ID        string `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Owner     string `boil:"owner" json:"owner" toml:"owner" yaml:"owner"`
-	Name      string `boil:"name" json:"name" toml:"name" yaml:"name"`
-	CreatedAt string `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	ID        string    `boil:"id" json:"id" toml:"id" yaml:"id"`
+	Owner     string    `boil:"owner" json:"owner" toml:"owner" yaml:"owner"`
+	Name      string    `boil:"name" json:"name" toml:"name" yaml:"name"`
+	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 
 	R *repositoryR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L repositoryL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -58,16 +58,37 @@ var RepositoryTableColumns = struct {
 
 // Generated where
 
+type whereHelpertime_Time struct{ field string }
+
+func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.EQ, x)
+}
+func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.NEQ, x)
+}
+func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+
 var RepositoryWhere = struct {
 	ID        whereHelperstring
 	Owner     whereHelperstring
 	Name      whereHelperstring
-	CreatedAt whereHelperstring
+	CreatedAt whereHelpertime_Time
 }{
 	ID:        whereHelperstring{field: "\"repositories\".\"id\""},
 	Owner:     whereHelperstring{field: "\"repositories\".\"owner\""},
 	Name:      whereHelperstring{field: "\"repositories\".\"name\""},
-	CreatedAt: whereHelperstring{field: "\"repositories\".\"created_at\""},
+	CreatedAt: whereHelpertime_Time{field: "\"repositories\".\"created_at\""},
 }
 
 // RepositoryRels is where relationship names are stored.
@@ -1017,15 +1038,13 @@ func (o *Repository) Insert(ctx context.Context, exec boil.ContextExecutor, colu
 	}
 
 	var err error
-	/*
 	if !boil.TimestampsAreSkipped(ctx) {
 		currTime := time.Now().In(boil.GetLocation())
 
-		if queries.MustTime(o.CreatedAt).IsZero() {
-			queries.SetScanner(&o.CreatedAt, currTime)
+		if o.CreatedAt.IsZero() {
+			o.CreatedAt = currTime
 		}
 	}
-	*/
 
 	if err := o.doBeforeInsertHooks(ctx, exec); err != nil {
 		return err
@@ -1231,15 +1250,13 @@ func (o *Repository) Upsert(ctx context.Context, exec boil.ContextExecutor, upda
 	if o == nil {
 		return errors.New("db: no repositories provided for upsert")
 	}
-	/*
 	if !boil.TimestampsAreSkipped(ctx) {
 		currTime := time.Now().In(boil.GetLocation())
 
-		if queries.MustTime(o.CreatedAt).IsZero() {
-			queries.SetScanner(&o.CreatedAt, currTime)
+		if o.CreatedAt.IsZero() {
+			o.CreatedAt = currTime
 		}
 	}
-	*/
 
 	if err := o.doBeforeUpsertHooks(ctx, exec); err != nil {
 		return err
