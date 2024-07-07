@@ -2,7 +2,7 @@ pkgname="db"
 output="graph/db"
 wipe=true
 add-global-variants=false
-no-test=true
+no-tests=true
 
 [sqlite3]
-    dbname = "./db/mygraphql.db"
+  dbname = "./db/mygraphql.db"
