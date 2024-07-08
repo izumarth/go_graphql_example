@@ -3,13 +3,14 @@ package services
 import (
 	"context"
 
-	"github.com/saki-engineering/graphql-sample/graph/model"
+	"github.com/izumarth/go-graphql-example/graph/model"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 type UserService interface {
 	GetUserByName(ctx context.Context, name string) (*model.User, error)
 	GetUserById(ctx context.Context, id string) (*model.User, error)
+	ListUsersByID(ctx context.Context, IDs []string) ([]*model.User, error)
 }
 
 type RepoService interface {

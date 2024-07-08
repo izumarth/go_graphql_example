@@ -9,10 +9,11 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/izumarth/go-graphql-example/graph"
+	"github.com/izumarth/go-graphql-example/graph/services"
+	"github.com/izumarth/go-graphql-example/internal"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/saki-engineering/graphql-sample/graph"
-	"github.com/saki-engineering/graphql-sample/graph/services"
-	"github.com/saki-engineering/graphql-sample/internal"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 const (
@@ -38,11 +39,14 @@ func main() {
 		internal.NewExecutableSchema(
 			internal.Config{
 				Resolvers: &graph.Resolver{
-					Srv: services,
+					Srv:     services,
+					Loaders: graph.NewLoaders(services),
 				},
 			},
 		),
 	)
+
+	boil.DebugMode = true
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

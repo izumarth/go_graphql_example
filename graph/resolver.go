@@ -1,6 +1,6 @@
 package graph
 
-import "github.com/saki-engineering/graphql-sample/graph/services"
+import "github.com/izumarth/go-graphql-example/graph/services"
 
 // This file will not be regenerated automatically.
 //
@@ -8,4 +8,5 @@ import "github.com/saki-engineering/graphql-sample/graph/services"
 
 type Resolver struct {
 	Srv services.Services
+	*Loaders
 }

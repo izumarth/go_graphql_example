@@ -1,10 +1,11 @@
-module github.com/saki-engineering/graphql-sample
+module github.com/izumarth/go-graphql-example
 
 go 1.22.5
 
 require (
 	github.com/99designs/gqlgen v0.17.49
 	github.com/friendsofgo/errors v0.9.2
+	github.com/graph-gophers/dataloader/v7 v7.1.0
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/vektah/gqlparser/v2 v2.5.16
 	github.com/volatiletech/null/v8 v8.1.2
