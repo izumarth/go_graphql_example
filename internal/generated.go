@@ -15,7 +15,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/saki-engineering/graphql-sample/graph/model"
+	"github.com/izumarth/go-graphql-example/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -40,6 +40,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	Issue() IssueResolver
 	Mutation() MutationResolver
 	ProjectV2() ProjectV2Resolver
 	Query() QueryResolver
@@ -175,6 +176,9 @@ type ComplexityRoot struct {
 	}
 }
 
+type IssueResolver interface {
+	Author(ctx context.Context, obj *model.Issue) (*model.User, error)
+}
 type MutationResolver interface {
 	AddProjectV2ItemByID(ctx context.Context, input model.AddProjectV2ItemByIDInput) (*model.AddProjectV2ItemByIDPayload, error)
 }
@@ -1116,7 +1120,7 @@ func (ec *executionContext) field_Mutation_addProjectV2ItemById_args(ctx context
 	var arg0 model.AddProjectV2ItemByIDInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNAddProjectV2ItemByIdInput2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐAddProjectV2ItemByIDInput(ctx, tmp)
+		arg0, err = ec.unmarshalNAddProjectV2ItemByIdInput2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐAddProjectV2ItemByIDInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1512,7 +1516,7 @@ func (ec *executionContext) _AddProjectV2ItemByIdPayload_item(ctx context.Contex
 	}
 	res := resTmp.(*model.ProjectV2Item)
 	fc.Result = res
-	return ec.marshalOProjectV2Item2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Item(ctx, field.Selections, res)
+	return ec.marshalOProjectV2Item2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Item(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AddProjectV2ItemByIdPayload_item(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1770,7 +1774,7 @@ func (ec *executionContext) _Issue_author(ctx context.Context, field graphql.Col
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Author, nil
+		return ec.resolvers.Issue().Author(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1784,15 +1788,15 @@ func (ec *executionContext) _Issue_author(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Issue_author(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Issue",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -1838,7 +1842,7 @@ func (ec *executionContext) _Issue_repository(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Repository)
 	fc.Result = res
-	return ec.marshalNRepository2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐRepository(ctx, field.Selections, res)
+	return ec.marshalNRepository2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐRepository(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Issue_repository(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1900,7 +1904,7 @@ func (ec *executionContext) _Issue_projectItems(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.ProjectV2ItemConnection)
 	fc.Result = res
-	return ec.marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemConnection(ctx, field.Selections, res)
+	return ec.marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Issue_projectItems(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1962,7 +1966,7 @@ func (ec *executionContext) _IssueConnection_edges(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.IssueEdge)
 	fc.Result = res
-	return ec.marshalOIssueEdge2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssueEdge(ctx, field.Selections, res)
+	return ec.marshalOIssueEdge2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssueEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_IssueConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2009,7 +2013,7 @@ func (ec *executionContext) _IssueConnection_nodes(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.Issue)
 	fc.Result = res
-	return ec.marshalOIssue2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssue(ctx, field.Selections, res)
+	return ec.marshalOIssue2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssue(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_IssueConnection_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2071,7 +2075,7 @@ func (ec *executionContext) _IssueConnection_pageInfo(ctx context.Context, field
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_IssueConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2210,7 +2214,7 @@ func (ec *executionContext) _IssueEdge_node(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Issue)
 	fc.Result = res
-	return ec.marshalOIssue2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssue(ctx, field.Selections, res)
+	return ec.marshalOIssue2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssue(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_IssueEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2269,7 +2273,7 @@ func (ec *executionContext) _Mutation_addProjectV2ItemById(ctx context.Context, 
 	}
 	res := resTmp.(*model.AddProjectV2ItemByIDPayload)
 	fc.Result = res
-	return ec.marshalOAddProjectV2ItemByIdPayload2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐAddProjectV2ItemByIDPayload(ctx, field.Selections, res)
+	return ec.marshalOAddProjectV2ItemByIdPayload2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐAddProjectV2ItemByIDPayload(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_addProjectV2ItemById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2674,7 +2678,7 @@ func (ec *executionContext) _ProjectV2_items(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*model.ProjectV2ItemConnection)
 	fc.Result = res
-	return ec.marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemConnection(ctx, field.Selections, res)
+	return ec.marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2_items(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2739,7 +2743,7 @@ func (ec *executionContext) _ProjectV2_owner(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2_owner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2790,7 +2794,7 @@ func (ec *executionContext) _ProjectV2Connection_edges(ctx context.Context, fiel
 	}
 	res := resTmp.([]*model.ProjectV2Edge)
 	fc.Result = res
-	return ec.marshalOProjectV2Edge2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Edge(ctx, field.Selections, res)
+	return ec.marshalOProjectV2Edge2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Edge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2Connection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2837,7 +2841,7 @@ func (ec *executionContext) _ProjectV2Connection_nodes(ctx context.Context, fiel
 	}
 	res := resTmp.([]*model.ProjectV2)
 	fc.Result = res
-	return ec.marshalOProjectV22ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2(ctx, field.Selections, res)
+	return ec.marshalOProjectV22ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2Connection_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2895,7 +2899,7 @@ func (ec *executionContext) _ProjectV2Connection_pageInfo(ctx context.Context, f
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2Connection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3034,7 +3038,7 @@ func (ec *executionContext) _ProjectV2Edge_node(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.ProjectV2)
 	fc.Result = res
-	return ec.marshalOProjectV22ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2(ctx, field.Selections, res)
+	return ec.marshalOProjectV22ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2Edge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3136,7 +3140,7 @@ func (ec *executionContext) _ProjectV2Item_project(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.ProjectV2)
 	fc.Result = res
-	return ec.marshalNProjectV22ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2(ctx, field.Selections, res)
+	return ec.marshalNProjectV22ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2Item_project(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3191,7 +3195,7 @@ func (ec *executionContext) _ProjectV2Item_content(ctx context.Context, field gr
 	}
 	res := resTmp.(model.ProjectV2ItemContent)
 	fc.Result = res
-	return ec.marshalOProjectV2ItemContent2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemContent(ctx, field.Selections, res)
+	return ec.marshalOProjectV2ItemContent2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemContent(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2Item_content(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3232,7 +3236,7 @@ func (ec *executionContext) _ProjectV2ItemConnection_edges(ctx context.Context, 
 	}
 	res := resTmp.([]*model.ProjectV2ItemEdge)
 	fc.Result = res
-	return ec.marshalOProjectV2ItemEdge2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemEdge(ctx, field.Selections, res)
+	return ec.marshalOProjectV2ItemEdge2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2ItemConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3279,7 +3283,7 @@ func (ec *executionContext) _ProjectV2ItemConnection_nodes(ctx context.Context, 
 	}
 	res := resTmp.([]*model.ProjectV2Item)
 	fc.Result = res
-	return ec.marshalOProjectV2Item2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Item(ctx, field.Selections, res)
+	return ec.marshalOProjectV2Item2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Item(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2ItemConnection_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3331,7 +3335,7 @@ func (ec *executionContext) _ProjectV2ItemConnection_pageInfo(ctx context.Contex
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2ItemConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3470,7 +3474,7 @@ func (ec *executionContext) _ProjectV2ItemEdge_node(ctx context.Context, field g
 	}
 	res := resTmp.(*model.ProjectV2Item)
 	fc.Result = res
-	return ec.marshalOProjectV2Item2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Item(ctx, field.Selections, res)
+	return ec.marshalOProjectV2Item2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Item(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProjectV2ItemEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3786,7 +3790,7 @@ func (ec *executionContext) _PullRequest_repository(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Repository)
 	fc.Result = res
-	return ec.marshalNRepository2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐRepository(ctx, field.Selections, res)
+	return ec.marshalNRepository2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐRepository(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PullRequest_repository(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3848,7 +3852,7 @@ func (ec *executionContext) _PullRequest_projectItems(ctx context.Context, field
 	}
 	res := resTmp.(*model.ProjectV2ItemConnection)
 	fc.Result = res
-	return ec.marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemConnection(ctx, field.Selections, res)
+	return ec.marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PullRequest_projectItems(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3910,7 +3914,7 @@ func (ec *executionContext) _PullRequestConnection_edges(ctx context.Context, fi
 	}
 	res := resTmp.([]*model.PullRequestEdge)
 	fc.Result = res
-	return ec.marshalOPullRequestEdge2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequestEdge(ctx, field.Selections, res)
+	return ec.marshalOPullRequestEdge2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequestEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PullRequestConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3957,7 +3961,7 @@ func (ec *executionContext) _PullRequestConnection_nodes(ctx context.Context, fi
 	}
 	res := resTmp.([]*model.PullRequest)
 	fc.Result = res
-	return ec.marshalOPullRequest2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequest(ctx, field.Selections, res)
+	return ec.marshalOPullRequest2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequest(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PullRequestConnection_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4019,7 +4023,7 @@ func (ec *executionContext) _PullRequestConnection_pageInfo(ctx context.Context,
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PullRequestConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4158,7 +4162,7 @@ func (ec *executionContext) _PullRequestEdge_node(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.PullRequest)
 	fc.Result = res
-	return ec.marshalOPullRequest2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequest(ctx, field.Selections, res)
+	return ec.marshalOPullRequest2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequest(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PullRequestEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4217,7 +4221,7 @@ func (ec *executionContext) _Query_repository(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Repository)
 	fc.Result = res
-	return ec.marshalORepository2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐRepository(ctx, field.Selections, res)
+	return ec.marshalORepository2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐRepository(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_repository(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4287,7 +4291,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4349,7 +4353,7 @@ func (ec *executionContext) _Query_node(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(model.Node)
 	fc.Result = res
-	return ec.marshalONode2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐNode(ctx, field.Selections, res)
+	return ec.marshalONode2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐNode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4577,7 +4581,7 @@ func (ec *executionContext) _Repository_owner(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Repository_owner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4716,7 +4720,7 @@ func (ec *executionContext) _Repository_issue(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Issue)
 	fc.Result = res
-	return ec.marshalOIssue2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssue(ctx, field.Selections, res)
+	return ec.marshalOIssue2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssue(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Repository_issue(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4789,7 +4793,7 @@ func (ec *executionContext) _Repository_issues(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.IssueConnection)
 	fc.Result = res
-	return ec.marshalNIssueConnection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssueConnection(ctx, field.Selections, res)
+	return ec.marshalNIssueConnection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssueConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Repository_issues(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4851,7 +4855,7 @@ func (ec *executionContext) _Repository_pullRequest(ctx context.Context, field g
 	}
 	res := resTmp.(*model.PullRequest)
 	fc.Result = res
-	return ec.marshalOPullRequest2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequest(ctx, field.Selections, res)
+	return ec.marshalOPullRequest2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequest(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Repository_pullRequest(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4924,7 +4928,7 @@ func (ec *executionContext) _Repository_pullRequests(ctx context.Context, field 
 	}
 	res := resTmp.(*model.PullRequestConnection)
 	fc.Result = res
-	return ec.marshalNPullRequestConnection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequestConnection(ctx, field.Selections, res)
+	return ec.marshalNPullRequestConnection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequestConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Repository_pullRequests(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5074,7 +5078,7 @@ func (ec *executionContext) _User_projectV2(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.ProjectV2)
 	fc.Result = res
-	return ec.marshalOProjectV22ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2(ctx, field.Selections, res)
+	return ec.marshalOProjectV22ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_projectV2(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5143,7 +5147,7 @@ func (ec *executionContext) _User_projectV2s(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*model.ProjectV2Connection)
 	fc.Result = res
-	return ec.marshalNProjectV2Connection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Connection(ctx, field.Selections, res)
+	return ec.marshalNProjectV2Connection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Connection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_projectV2s(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7119,42 +7123,73 @@ func (ec *executionContext) _Issue(ctx context.Context, sel ast.SelectionSet, ob
 		case "id":
 			out.Values[i] = ec._Issue_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "url":
 			out.Values[i] = ec._Issue_url(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "title":
 			out.Values[i] = ec._Issue_title(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "closed":
 			out.Values[i] = ec._Issue_closed(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "number":
 			out.Values[i] = ec._Issue_number(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "author":
-			out.Values[i] = ec._Issue_author(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Issue_author(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
 			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "repository":
 			out.Values[i] = ec._Issue_repository(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "projectItems":
 			out.Values[i] = ec._Issue_projectItems(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -8551,7 +8586,7 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNAddProjectV2ItemByIdInput2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐAddProjectV2ItemByIDInput(ctx context.Context, v interface{}) (model.AddProjectV2ItemByIDInput, error) {
+func (ec *executionContext) unmarshalNAddProjectV2ItemByIdInput2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐAddProjectV2ItemByIDInput(ctx context.Context, v interface{}) (model.AddProjectV2ItemByIDInput, error) {
 	res, err := ec.unmarshalInputAddProjectV2ItemByIdInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -8616,11 +8651,11 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNIssueConnection2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssueConnection(ctx context.Context, sel ast.SelectionSet, v model.IssueConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNIssueConnection2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssueConnection(ctx context.Context, sel ast.SelectionSet, v model.IssueConnection) graphql.Marshaler {
 	return ec._IssueConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNIssueConnection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssueConnection(ctx context.Context, sel ast.SelectionSet, v *model.IssueConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNIssueConnection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssueConnection(ctx context.Context, sel ast.SelectionSet, v *model.IssueConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8630,7 +8665,7 @@ func (ec *executionContext) marshalNIssueConnection2ᚖgithubᚗcomᚋsakiᚑeng
 	return ec._IssueConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8640,7 +8675,7 @@ func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋsakiᚑengineerin
 	return ec._PageInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProjectV22ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectV22ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8650,7 +8685,7 @@ func (ec *executionContext) marshalNProjectV22ᚖgithubᚗcomᚋsakiᚑengineeri
 	return ec._ProjectV2(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProjectV2Connection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Connection(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2Connection) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectV2Connection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Connection(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2Connection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8660,7 +8695,7 @@ func (ec *executionContext) marshalNProjectV2Connection2ᚖgithubᚗcomᚋsaki�
 	return ec._ProjectV2Connection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2ItemConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2ItemConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8670,11 +8705,11 @@ func (ec *executionContext) marshalNProjectV2ItemConnection2ᚖgithubᚗcomᚋsa
 	return ec._ProjectV2ItemConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPullRequestConnection2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequestConnection(ctx context.Context, sel ast.SelectionSet, v model.PullRequestConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNPullRequestConnection2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequestConnection(ctx context.Context, sel ast.SelectionSet, v model.PullRequestConnection) graphql.Marshaler {
 	return ec._PullRequestConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNPullRequestConnection2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequestConnection(ctx context.Context, sel ast.SelectionSet, v *model.PullRequestConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNPullRequestConnection2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequestConnection(ctx context.Context, sel ast.SelectionSet, v *model.PullRequestConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8684,7 +8719,7 @@ func (ec *executionContext) marshalNPullRequestConnection2ᚖgithubᚗcomᚋsaki
 	return ec._PullRequestConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRepository2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐRepository(ctx context.Context, sel ast.SelectionSet, v *model.Repository) graphql.Marshaler {
+func (ec *executionContext) marshalNRepository2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐRepository(ctx context.Context, sel ast.SelectionSet, v *model.Repository) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8724,11 +8759,11 @@ func (ec *executionContext) marshalNURI2netᚋurlᚐURL(ctx context.Context, sel
 	return res
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8991,7 +9026,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOAddProjectV2ItemByIdPayload2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐAddProjectV2ItemByIDPayload(ctx context.Context, sel ast.SelectionSet, v *model.AddProjectV2ItemByIDPayload) graphql.Marshaler {
+func (ec *executionContext) marshalOAddProjectV2ItemByIdPayload2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐAddProjectV2ItemByIDPayload(ctx context.Context, sel ast.SelectionSet, v *model.AddProjectV2ItemByIDPayload) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9040,7 +9075,7 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalOIssue2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssue(ctx context.Context, sel ast.SelectionSet, v []*model.Issue) graphql.Marshaler {
+func (ec *executionContext) marshalOIssue2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssue(ctx context.Context, sel ast.SelectionSet, v []*model.Issue) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9067,7 +9102,7 @@ func (ec *executionContext) marshalOIssue2ᚕᚖgithubᚗcomᚋsakiᚑengineerin
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOIssue2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssue(ctx, sel, v[i])
+			ret[i] = ec.marshalOIssue2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssue(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9081,14 +9116,14 @@ func (ec *executionContext) marshalOIssue2ᚕᚖgithubᚗcomᚋsakiᚑengineerin
 	return ret
 }
 
-func (ec *executionContext) marshalOIssue2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssue(ctx context.Context, sel ast.SelectionSet, v *model.Issue) graphql.Marshaler {
+func (ec *executionContext) marshalOIssue2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssue(ctx context.Context, sel ast.SelectionSet, v *model.Issue) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Issue(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOIssueEdge2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssueEdge(ctx context.Context, sel ast.SelectionSet, v []*model.IssueEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOIssueEdge2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssueEdge(ctx context.Context, sel ast.SelectionSet, v []*model.IssueEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9115,7 +9150,7 @@ func (ec *executionContext) marshalOIssueEdge2ᚕᚖgithubᚗcomᚋsakiᚑengine
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOIssueEdge2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssueEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOIssueEdge2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssueEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9129,21 +9164,21 @@ func (ec *executionContext) marshalOIssueEdge2ᚕᚖgithubᚗcomᚋsakiᚑengine
 	return ret
 }
 
-func (ec *executionContext) marshalOIssueEdge2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐIssueEdge(ctx context.Context, sel ast.SelectionSet, v *model.IssueEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOIssueEdge2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐIssueEdge(ctx context.Context, sel ast.SelectionSet, v *model.IssueEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._IssueEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalONode2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐNode(ctx context.Context, sel ast.SelectionSet, v model.Node) graphql.Marshaler {
+func (ec *executionContext) marshalONode2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐNode(ctx context.Context, sel ast.SelectionSet, v model.Node) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Node(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOProjectV22ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectV2) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV22ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectV2) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9170,7 +9205,7 @@ func (ec *executionContext) marshalOProjectV22ᚕᚖgithubᚗcomᚋsakiᚑengine
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOProjectV22ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2(ctx, sel, v[i])
+			ret[i] = ec.marshalOProjectV22ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9184,14 +9219,14 @@ func (ec *executionContext) marshalOProjectV22ᚕᚖgithubᚗcomᚋsakiᚑengine
 	return ret
 }
 
-func (ec *executionContext) marshalOProjectV22ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV22ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ProjectV2(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOProjectV2Edge2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Edge(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectV2Edge) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV2Edge2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Edge(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectV2Edge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9218,7 +9253,7 @@ func (ec *executionContext) marshalOProjectV2Edge2ᚕᚖgithubᚗcomᚋsakiᚑen
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOProjectV2Edge2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Edge(ctx, sel, v[i])
+			ret[i] = ec.marshalOProjectV2Edge2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Edge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9232,14 +9267,14 @@ func (ec *executionContext) marshalOProjectV2Edge2ᚕᚖgithubᚗcomᚋsakiᚑen
 	return ret
 }
 
-func (ec *executionContext) marshalOProjectV2Edge2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Edge(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2Edge) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV2Edge2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Edge(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2Edge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ProjectV2Edge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOProjectV2Item2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Item(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectV2Item) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV2Item2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Item(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectV2Item) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9266,7 +9301,7 @@ func (ec *executionContext) marshalOProjectV2Item2ᚕᚖgithubᚗcomᚋsakiᚑen
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOProjectV2Item2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Item(ctx, sel, v[i])
+			ret[i] = ec.marshalOProjectV2Item2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Item(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9280,21 +9315,21 @@ func (ec *executionContext) marshalOProjectV2Item2ᚕᚖgithubᚗcomᚋsakiᚑen
 	return ret
 }
 
-func (ec *executionContext) marshalOProjectV2Item2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2Item(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2Item) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV2Item2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2Item(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2Item) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ProjectV2Item(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOProjectV2ItemContent2githubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemContent(ctx context.Context, sel ast.SelectionSet, v model.ProjectV2ItemContent) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV2ItemContent2githubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemContent(ctx context.Context, sel ast.SelectionSet, v model.ProjectV2ItemContent) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ProjectV2ItemContent(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOProjectV2ItemEdge2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectV2ItemEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV2ItemEdge2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectV2ItemEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9321,7 +9356,7 @@ func (ec *executionContext) marshalOProjectV2ItemEdge2ᚕᚖgithubᚗcomᚋsaki�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOProjectV2ItemEdge2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOProjectV2ItemEdge2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9335,14 +9370,14 @@ func (ec *executionContext) marshalOProjectV2ItemEdge2ᚕᚖgithubᚗcomᚋsaki�
 	return ret
 }
 
-func (ec *executionContext) marshalOProjectV2ItemEdge2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐProjectV2ItemEdge(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2ItemEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectV2ItemEdge2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐProjectV2ItemEdge(ctx context.Context, sel ast.SelectionSet, v *model.ProjectV2ItemEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ProjectV2ItemEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOPullRequest2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequest(ctx context.Context, sel ast.SelectionSet, v []*model.PullRequest) graphql.Marshaler {
+func (ec *executionContext) marshalOPullRequest2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequest(ctx context.Context, sel ast.SelectionSet, v []*model.PullRequest) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9369,7 +9404,7 @@ func (ec *executionContext) marshalOPullRequest2ᚕᚖgithubᚗcomᚋsakiᚑengi
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPullRequest2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequest(ctx, sel, v[i])
+			ret[i] = ec.marshalOPullRequest2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequest(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9383,14 +9418,14 @@ func (ec *executionContext) marshalOPullRequest2ᚕᚖgithubᚗcomᚋsakiᚑengi
 	return ret
 }
 
-func (ec *executionContext) marshalOPullRequest2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequest(ctx context.Context, sel ast.SelectionSet, v *model.PullRequest) graphql.Marshaler {
+func (ec *executionContext) marshalOPullRequest2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequest(ctx context.Context, sel ast.SelectionSet, v *model.PullRequest) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._PullRequest(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOPullRequestEdge2ᚕᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequestEdge(ctx context.Context, sel ast.SelectionSet, v []*model.PullRequestEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOPullRequestEdge2ᚕᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequestEdge(ctx context.Context, sel ast.SelectionSet, v []*model.PullRequestEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9417,7 +9452,7 @@ func (ec *executionContext) marshalOPullRequestEdge2ᚕᚖgithubᚗcomᚋsakiᚑ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPullRequestEdge2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequestEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOPullRequestEdge2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequestEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9431,14 +9466,14 @@ func (ec *executionContext) marshalOPullRequestEdge2ᚕᚖgithubᚗcomᚋsakiᚑ
 	return ret
 }
 
-func (ec *executionContext) marshalOPullRequestEdge2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐPullRequestEdge(ctx context.Context, sel ast.SelectionSet, v *model.PullRequestEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOPullRequestEdge2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐPullRequestEdge(ctx context.Context, sel ast.SelectionSet, v *model.PullRequestEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._PullRequestEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalORepository2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐRepository(ctx context.Context, sel ast.SelectionSet, v *model.Repository) graphql.Marshaler {
+func (ec *executionContext) marshalORepository2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐRepository(ctx context.Context, sel ast.SelectionSet, v *model.Repository) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9461,7 +9496,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋsakiᚑengineeringᚋgraphqlᚑsampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋizumarthᚋgoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

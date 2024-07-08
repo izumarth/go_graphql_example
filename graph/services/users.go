@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 
-	"github.com/saki-engineering/graphql-sample/graph/db"
-	"github.com/saki-engineering/graphql-sample/graph/model"
+	"github.com/izumarth/go-graphql-example/graph/db"
+	"github.com/izumarth/go-graphql-example/graph/model"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
@@ -51,6 +51,23 @@ func (u *userService) GetUserById(
 	return convertUser(user), nil
 }
 
+func (u *userService) ListUsersByID(
+	ctx context.Context,
+	IDs []string,
+) ([]*model.User, error) {
+	users, err := db.Users(
+		qm.Select(
+			db.UserColumns.ID,
+			db.UserColumns.Name,
+		),
+		db.UserWhere.ID.IN(IDs),
+	).All(ctx, u.exec)
+	if err != nil {
+		return nil, err
+	}
+	return convertUserSlice(users), nil
+}
+
 func convertUser(
 	user *db.User,
 ) *model.User {
@@ -58,4 +75,12 @@ func convertUser(
 		ID:   user.ID,
 		Name: user.Name,
 	}
+}
+
+func convertUserSlice(users db.UserSlice) []*model.User {
+	result := make([]*model.User, 0, len(users))
+	for _, user := range users {
+		result = append(result, convertUser(user))
+	}
+	return result
 }

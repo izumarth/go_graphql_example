@@ -8,22 +8,32 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/saki-engineering/graphql-sample/graph/model"
-	"github.com/saki-engineering/graphql-sample/internal"
+	model1 "github.com/izumarth/go-graphql-example/graph/model"
+	internal1 "github.com/izumarth/go-graphql-example/internal"
 )
 
+// Author is the resolver for the author field.
+func (r *issueResolver) Author(ctx context.Context, obj *model1.Issue) (*model1.User, error) {
+	thunk := r.Loaders.UserLoader.Load(ctx, obj.Author.ID)
+	user, err := thunk()
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
 // AddProjectV2ItemByID is the resolver for the addProjectV2ItemById field.
-func (r *mutationResolver) AddProjectV2ItemByID(ctx context.Context, input model.AddProjectV2ItemByIDInput) (*model.AddProjectV2ItemByIDPayload, error) {
+func (r *mutationResolver) AddProjectV2ItemByID(ctx context.Context, input model1.AddProjectV2ItemByIDInput) (*model1.AddProjectV2ItemByIDPayload, error) {
 	panic(fmt.Errorf("not implemented: AddProjectV2ItemByID - addProjectV2ItemById"))
 }
 
 // Owner is the resolver for the owner field.
-func (r *projectV2Resolver) Owner(ctx context.Context, obj *model.ProjectV2) (*model.User, error) {
+func (r *projectV2Resolver) Owner(ctx context.Context, obj *model1.ProjectV2) (*model1.User, error) {
 	panic(fmt.Errorf("not implemented: Owner - owner"))
 }
 
 // Repository is the resolver for the repository field.
-func (r *queryResolver) Repository(ctx context.Context, name string, owner string) (*model.Repository, error) {
+func (r *queryResolver) Repository(ctx context.Context, name string, owner string) (*model1.Repository, error) {
 	user, err := r.Srv.GetUserByName(ctx, owner)
 	if err != nil {
 		return nil, err
@@ -33,52 +43,56 @@ func (r *queryResolver) Repository(ctx context.Context, name string, owner strin
 }
 
 // User is the resolver for the user field.
-func (r *queryResolver) User(ctx context.Context, name string) (*model.User, error) {
+func (r *queryResolver) User(ctx context.Context, name string) (*model1.User, error) {
 	return r.Srv.GetUserByName(ctx, name)
 }
 
 // Node is the resolver for the node field.
-func (r *queryResolver) Node(ctx context.Context, id string) (model.Node, error) {
+func (r *queryResolver) Node(ctx context.Context, id string) (model1.Node, error) {
 	panic(fmt.Errorf("not implemented: Node - node"))
 }
 
 // Owner is the resolver for the owner field.
-func (r *repositoryResolver) Owner(ctx context.Context, obj *model.Repository) (*model.User, error) {
+func (r *repositoryResolver) Owner(ctx context.Context, obj *model1.Repository) (*model1.User, error) {
 	return r.Srv.GetUserById(ctx, obj.Owner.ID)
 }
 
 // Issue is the resolver for the issue field.
-func (r *repositoryResolver) Issue(ctx context.Context, obj *model.Repository, number int) (*model.Issue, error) {
+func (r *repositoryResolver) Issue(ctx context.Context, obj *model1.Repository, number int) (*model1.Issue, error) {
 	return r.Srv.GetIssueByRepoAndNumber(ctx, obj.ID, number)
 }
 
 // Issues is the resolver for the issues field.
-func (r *repositoryResolver) Issues(ctx context.Context, obj *model.Repository, after *string, before *string, first *int, last *int) (*model.IssueConnection, error) {
+func (r *repositoryResolver) Issues(ctx context.Context, obj *model1.Repository, after *string, before *string, first *int, last *int) (*model1.IssueConnection, error) {
 	return r.Srv.ListIssueInRepository(ctx, obj.ID, after, before, first, last)
 }
 
 // PullRequest is the resolver for the pullRequest field.
-func (r *repositoryResolver) PullRequest(ctx context.Context, obj *model.Repository, number int) (*model.PullRequest, error) {
+func (r *repositoryResolver) PullRequest(ctx context.Context, obj *model1.Repository, number int) (*model1.PullRequest, error) {
 	panic(fmt.Errorf("not implemented: PullRequest - pullRequest"))
 }
 
 // PullRequests is the resolver for the pullRequests field.
-func (r *repositoryResolver) PullRequests(ctx context.Context, obj *model.Repository, after *string, before *string, first *int, last *int) (*model.PullRequestConnection, error) {
+func (r *repositoryResolver) PullRequests(ctx context.Context, obj *model1.Repository, after *string, before *string, first *int, last *int) (*model1.PullRequestConnection, error) {
 	panic(fmt.Errorf("not implemented: PullRequests - pullRequests"))
 }
 
-// Mutation returns internal.MutationResolver implementation.
-func (r *Resolver) Mutation() internal.MutationResolver { return &mutationResolver{r} }
+// Issue returns internal1.IssueResolver implementation.
+func (r *Resolver) Issue() internal1.IssueResolver { return &issueResolver{r} }
 
-// ProjectV2 returns internal.ProjectV2Resolver implementation.
-func (r *Resolver) ProjectV2() internal.ProjectV2Resolver { return &projectV2Resolver{r} }
+// Mutation returns internal1.MutationResolver implementation.
+func (r *Resolver) Mutation() internal1.MutationResolver { return &mutationResolver{r} }
 
-// Query returns internal.QueryResolver implementation.
-func (r *Resolver) Query() internal.QueryResolver { return &queryResolver{r} }
+// ProjectV2 returns internal1.ProjectV2Resolver implementation.
+func (r *Resolver) ProjectV2() internal1.ProjectV2Resolver { return &projectV2Resolver{r} }
 
-// Repository returns internal.RepositoryResolver implementation.
-func (r *Resolver) Repository() internal.RepositoryResolver { return &repositoryResolver{r} }
+// Query returns internal1.QueryResolver implementation.
+func (r *Resolver) Query() internal1.QueryResolver { return &queryResolver{r} }
 
+// Repository returns internal1.RepositoryResolver implementation.
+func (r *Resolver) Repository() internal1.RepositoryResolver { return &repositoryResolver{r} }
+
+type issueResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type projectV2Resolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

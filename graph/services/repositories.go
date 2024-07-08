@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 
-	"github.com/saki-engineering/graphql-sample/graph/db"
-	"github.com/saki-engineering/graphql-sample/graph/model"
+	"github.com/izumarth/go-graphql-example/graph/db"
+	"github.com/izumarth/go-graphql-example/graph/model"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
