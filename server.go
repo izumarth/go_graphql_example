@@ -14,7 +14,7 @@ import (
 	"github.com/izumarth/go-graphql-example/graph/services"
 	"github.com/izumarth/go-graphql-example/internal"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/boil"
 )
 
 const (
@@ -48,6 +48,39 @@ func main() {
 		),
 	)
 	srv.Use(extension.FixedComplexityLimit(50))
+
+	/*
+		srv.AroundRootFields(func(ctx context.Context, next graphql.RootResolver) graphql.Marshaler {
+			log.Println("before RootResolver")
+			res := next(ctx)
+			defer func() {
+				var b bytes.Buffer
+				res.MarshalGQL(&b)
+				log.Println("after RootResolver") //, b.String())
+			}()
+			return res
+		})
+
+		srv.AroundOperations(func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
+			log.Println("before OperationHandler")
+			res := next(ctx)
+			defer log.Println("after OperationHandler")
+			return res
+		})
+
+		srv.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+			log.Println("before AroundResponses")
+			res := next(ctx)
+			defer log.Println("after AroundResponses")
+			return res
+		})
+
+		srv.AroundFields(func(ctx context.Context, next graphql.Resolver) (res interface{}, err error) {
+			res, err = next(ctx)
+			log.Println(res)
+			return
+		})
+	*/
 
 	boil.DebugMode = true
 
