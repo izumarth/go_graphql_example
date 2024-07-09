@@ -6,7 +6,9 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"strings"
 
 	model1 "github.com/izumarth/go-graphql-example/graph/model"
 	internal1 "github.com/izumarth/go-graphql-example/internal"
@@ -49,7 +51,15 @@ func (r *queryResolver) User(ctx context.Context, name string) (*model1.User, er
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id string) (model1.Node, error) {
-	panic(fmt.Errorf("not implemented: Node - node"))
+	nElems := strings.SplitN(id, "_", 2)
+	nType, _ := nElems[0], nElems[1]
+
+	switch nType {
+	case "U":
+		return r.Srv.GetUserById(ctx, id)
+	default:
+		return nil, errors.New("invalid ID")
+	}
 }
 
 // Owner is the resolver for the owner field.
