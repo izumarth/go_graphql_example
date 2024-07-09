@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/izumarth/go-graphql-example/graph"
 	"github.com/izumarth/go-graphql-example/graph/services"
@@ -42,9 +43,11 @@ func main() {
 					Srv:     services,
 					Loaders: graph.NewLoaders(services),
 				},
+				Complexity: graph.ComplexityConfig(),
 			},
 		),
 	)
+	srv.Use(extension.FixedComplexityLimit(50))
 
 	boil.DebugMode = true
 
